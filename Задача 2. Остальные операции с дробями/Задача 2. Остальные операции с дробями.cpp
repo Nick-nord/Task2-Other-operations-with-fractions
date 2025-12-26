@@ -1,7 +1,7 @@
 ﻿// Задача 2. Остальные операции с дробями.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 //
 #include <iostream>
-#include <algorithm>
+#include <numeric>
 
 class Fraction
 {
@@ -10,9 +10,14 @@ private:
 	int denominator_;
 	
 public:
-    Fraction(int numerator, int denominator): numerator_{ numerator }, denominator_{ denominator }
-	{}
-	
+    
+	Fraction(int numerator, int denominator)
+	{
+		int gcd = std::gcd(numerator, denominator); 
+		numerator_ = numerator / gcd;              
+		denominator_ = denominator / gcd;          
+	}
+
     ~Fraction()
     {}
 	
@@ -31,20 +36,12 @@ public:
 		return temporary;
 	}
 public:
-    int gcd(int numerator_, int denominator_)
-	{
-		numerator_ = abs(numerator_), denominator_ = abs(denominator_);
-	    if (denominator_ == 0)return numerator_;
-	    else return gcd(denominator_, numerator_ % denominator_);
-    }
+   
 	void printFraction()
 	{
-	int x = gcd(numerator_, denominator_);
-	numerator_ /= x;
-	denominator_ /= x;
-	std::cout << numerator_ << " / " << denominator_ << std::endl;
+	  std::cout << numerator_ << " / " << denominator_ << std::endl;
     }
-
+    
 public:
 	friend Fraction operator+(const Fraction& f1, const Fraction& f2);
 	friend Fraction operator-(const Fraction& f1, const Fraction& f2);
@@ -84,12 +81,15 @@ int main()
     std::cout << "Enter the denominator of the fraction 1:";
     std::cin >> denominator2;
     Fraction f2(numerator2, denominator2);
+
 	Fraction f3{ f1 + f2 };
 	std::cout << numerator1 << " / " << denominator1 << " + " << numerator2 << " / " << denominator2 << " = ";
 	f3.printFraction();
+
 	Fraction f4{ f1 - f2 };
 	std::cout << numerator1 << " / " << denominator1 << " - " << numerator2 << " / " << denominator2 << " = ";
 	f4.printFraction();
+
 	Fraction f5{ f1 * f2 };
 	std::cout << numerator1 << " / " << denominator1 << " + " << numerator2 << " / " << denominator2 << " = ";
 	f5.printFraction();
